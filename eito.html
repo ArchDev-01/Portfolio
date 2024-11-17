@@ -1,0 +1,677 @@
+<html><head><base href="/" /><title>Portfolio</title><style>
+:root {
+  --bg-color: #ffffff;
+  --text-color: #0a0a0a;
+  --accent: #333333;  
+  --timing: 0.3s;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;  
+  outline: none;  
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  overflow-x: hidden;
+}
+
+.signature {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  font-family: Georgia, serif;
+  font-size: 24px;
+  font-weight: bold;
+  font-style: italic;
+  color: var(--text-color);
+  opacity: 0.8;
+  z-index: 1000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.signature.expanded {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  transform: scale(1.1);
+  position: relative;
+  z-index: 1002; 
+}
+
+.navigation {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.1); 
+  backdrop-filter: blur(10px); 
+  -webkit-backdrop-filter: blur(10px); 
+  padding: 10px 20px; 
+  border-radius: 30px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.nav-item {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.05); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--timing);
+}
+
+.nav-item:focus,
+.highlight:focus,
+.signature:focus,
+.project-card:focus,
+.skill-item:focus,
+.info-panel-close:focus {
+  outline: none;
+}
+
+.nav-item:hover {
+  transform: translateY(-5px);
+}
+
+.nav-item.active {
+  background: var(--accent);
+  color: white;
+}
+
+.section {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: blur(10px);
+  overflow-y: auto; 
+}
+
+.section.active {
+  opacity: 1;
+  pointer-events: all;
+  filter: blur(0);
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.hero-title {
+  font-size: 120px;
+  font-weight: 900;
+  opacity: 0;
+  animation: fadeIn 1s forwards 0.5s;
+}
+
+.hero-description {
+  font-size: 24px;
+  max-width: 600px;
+  text-align: center;
+  line-height: 1.6;
+  opacity: 0;
+  animation: fadeIn 1s forwards 1s;
+}
+
+.highlight {
+  color: var(--accent);
+  display: inline-block;
+  transition: all 0.3s ease;
+  font-weight: bold;  
+  cursor: pointer;
+}
+
+.highlight:hover {
+  transform: scale(1.1);
+}
+
+.highlight.expanded {
+  transform: scale(1.2);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  position: relative;
+  z-index: 1002; 
+}
+
+.crosshatch {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.1;
+  z-index: -1;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.custom-cursor {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: all 0.1s ease;
+  transform: translate(-50%, -50%);
+}
+
+.info-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: var(--bg-color);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  z-index: 1001;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  max-width: 500px;
+  width: 90%;
+}
+
+.info-panel.active {
+  opacity: 1;
+  pointer-events: all;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.info-panel-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: var(--accent);
+}
+
+.info-panel-content {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.info-panel-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.info-panel-close:hover {
+  background: rgba(0,0,0,0.2);
+  transform: rotate(90deg);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px); 
+  background: rgba(0, 0, 0, 0.1); 
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+.project-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  animation: slideIn 0.5s ease-out;
+  animation-fill-mode: backwards;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+}
+
+.project-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: var(--accent);
+}
+
+.project-description {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.project-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.project-tag {
+  background: var(--accent);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 14px;
+}
+
+.about-container {
+  max-width: 800px;
+  margin: 0 auto; 
+  padding: 2rem;
+  padding-top: 100px; 
+  padding-bottom: 100px; 
+}
+
+.profile-container {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 2rem auto;
+  position: relative;
+  animation: profileFloat 3s ease-in-out infinite;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--accent);
+  filter: grayscale(0.2);
+  transition: all 0.3s ease;
+}
+
+.profile-image:hover {
+  filter: grayscale(0);
+  transform: scale(1.05);
+  border-width: 5px;
+}
+
+@keyframes profileFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.about-title {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: var(--accent);
+}
+
+.about-text {
+  font-size: 18px;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.skill-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 10px;
+  text-align: center;
+  transition: all 0.3s ease;
+  animation: popIn 0.5s ease-out;
+  animation-fill-mode: backwards;
+}
+
+.skill-item:hover {
+  transform: translateY(-3px);
+  background: var(--accent);
+  color: white;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.nav-item:focus-visible,
+.highlight:focus-visible,
+.signature:focus-visible,
+.project-card:focus-visible,
+.skill-item:focus-visible,
+.info-panel-close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const cursor = document.createElement('div');
+  cursor.classList.add('custom-cursor');
+  document.body.appendChild(cursor);
+
+  let cursorX = 0;
+  let cursorY = 0;
+  let currentX = 0;
+  let currentY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    cursorX = e.clientX;
+    cursorY = e.clientY;
+  });
+
+  function updateCursor() {
+    const dx = cursorX - currentX;
+    const dy = cursorY - currentY;
+    
+    currentX += dx * 0.1;
+    currentY += dy * 0.1;
+    
+    cursor.style.left = `${currentX}px`;
+    cursor.style.top = `${currentY}px`;
+    
+    requestAnimationFrame(updateCursor);
+  }
+  updateCursor();
+
+  const infoPanels = {
+    'Eito': {
+      title: 'About Eito',
+      content: 'Hi, I\'m Eito, a passionate web developer. I love creating beautiful and functional websites that make a difference.'
+    },
+    'EitoSz': {
+      title: 'EitoSz - My Brand',
+      content: 'EitoSz is my online persona and brand name. It represents my commitment to creating innovative and engaging web experiences.'
+    },
+    'HTML': {
+      title: 'HTML Expertise',
+      content: 'I use HTML5 to create structured, semantic, and accessible web content. My knowledge includes advanced HTML features and best practices for modern web development.'
+    },
+    'CSS': {
+      title: 'CSS Skills',
+      content: 'From responsive layouts to complex animations, I leverage CSS3 to create visually stunning and mobile-friendly websites. I\'m proficient in modern CSS frameworks and methodologies.'
+    },
+    'JavaScript': {
+      title: 'JavaScript Proficiency',
+      content: 'I specialize in modern JavaScript development, including ES6+ features, DOM manipulation, and popular frameworks. I create interactive and dynamic web applications.'
+    },
+    'E.S.': {
+      title: 'Signature',
+      content: 'E.S. stands for EitoSz, my professional signature representing my commitment to quality and creativity in web development.'
+    }
+  };
+
+  const overlay = document.createElement('div');
+  overlay.classList.add('overlay');
+  document.body.appendChild(overlay);
+
+  const createInfoPanel = (type) => {
+    const panel = document.createElement('div');
+    panel.classList.add('info-panel');
+    panel.innerHTML = `
+      <div class="info-panel-title">${infoPanels[type].title}</div>
+      <div class="info-panel-content">${infoPanels[type].content}</div>
+      <div class="info-panel-close">✕</div>
+    `;
+    document.body.appendChild(panel);
+    return panel;
+  };
+
+  const showPanel = (panel) => {
+    overlay.classList.add('active');
+    panel.classList.add('active');
+  };
+
+  const hidePanel = (panel) => {
+    overlay.classList.remove('active');
+    panel.classList.remove('active');
+  };
+
+  document.querySelectorAll('.highlight').forEach(element => {
+    const panel = createInfoPanel(element.textContent);
+    
+    element.addEventListener('click', () => {
+      element.classList.toggle('expanded');
+      showPanel(panel);
+    });
+
+    panel.querySelector('.info-panel-close').addEventListener('click', () => {
+      hidePanel(panel);
+      element.classList.remove('expanded');
+    });
+  });
+
+  const signature = document.querySelector('.signature');
+  const signaturePanel = createInfoPanel('E.S.');
+  
+  signature.addEventListener('click', () => {
+    signature.classList.toggle('expanded');
+    showPanel(signaturePanel);
+  });
+
+  overlay.addEventListener('click', () => {
+    document.querySelectorAll('.info-panel').forEach(panel => {
+      hidePanel(panel);
+    });
+    document.querySelectorAll('.highlight').forEach(element => {
+      element.classList.remove('expanded');
+    });
+    signature.classList.remove('expanded');
+  });
+
+  const crosshatch = document.querySelector('.crosshatch');
+  const ctx = crosshatch.getContext('2d');
+  let currentSection = 0;
+  const sections = document.querySelectorAll('.section');
+  
+  const resize = () => {
+    crosshatch.width = window.innerWidth;
+    crosshatch.height = window.innerHeight;
+    drawCrosshatch();
+  };
+
+  const drawCrosshatch = () => {
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 0.5;
+    
+    for(let x = -100; x < crosshatch.width + 100; x += 20) {
+      ctx.beginPath();
+      ctx.moveTo(x, -100);
+      ctx.lineTo(x + 100, crosshatch.height + 100);
+      ctx.stroke();
+    }
+  };
+
+  window.addEventListener('resize', resize);
+  resize();
+
+  const updateSection = (index) => {
+    sections.forEach(section => section.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    
+    sections[index].classList.add('active');
+    document.querySelectorAll('.nav-item')[index].classList.add('active');
+    currentSection = index;
+  };
+
+  document.querySelectorAll('.nav-item').forEach((item, index) => {
+    item.addEventListener('click', () => updateSection(index));
+  });
+
+  updateSection(0);
+
+  document.querySelectorAll('.project-card').forEach((card, index) => {
+    card.style.animationDelay = `${index * 0.2}s`;
+  });
+
+  document.querySelectorAll('.skill-item').forEach((skill, index) => {
+    skill.style.animationDelay = `${index * 0.1}s`;
+  });
+});
+</script>
+</head>
+<body>
+  <canvas class="crosshatch"></canvas>
+  
+  <section class="section hero">
+    <h1 class="hero-title">Eito</h1>
+    <p class="hero-description">
+      Hello, my name is <span class="highlight">Eito</span> but you can call me <span class="highlight">EitoSz</span>. 
+      I use <span class="highlight">HTML</span>, <span class="highlight">CSS</span>, and <span class="highlight">JavaScript</span> 
+      to create stunning websites
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="projects-grid">
+      <div class="project-card">
+        <h3 class="project-title">Portfolio Website</h3>
+        <p class="project-description">A modern, interactive portfolio showcasing my work and skills with smooth animations and clean design.</p>
+        <div class="project-tags">
+          <span class="project-tag">HTML</span>
+          <span class="project-tag">CSS</span>
+          <span class="project-tag">JavaScript</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <h3 class="project-title">Task Manager</h3>
+        <p class="project-description">A full-featured task management application with real-time updates and collaborative features.</p>
+        <div class="project-tags">
+          <span class="project-tag">React</span>
+          <span class="project-tag">Node.js</span>
+          <span class="project-tag">MongoDB</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <h3 class="project-title">Weather Dashboard</h3>
+        <p class="project-description">An interactive weather application with detailed forecasts and beautiful visualizations.</p>
+        <div class="project-tags">
+          <span class="project-tag">JavaScript</span>
+          <span class="project-tag">API</span>
+          <span class="project-tag">CSS</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="about-container">
+      <div class="profile-container">
+        <img src="profile.png" alt="Eito's profile photo - young developer with a professional appearance" class="profile-image">
+      </div>
+      <h2 class="about-title">About Me</h2>
+      <p class="about-text">
+        I'm a passionate web developer with a love for creating beautiful and functional websites. 
+        With several years of experience in front-end development, I specialize in building 
+        responsive and user-friendly web applications that make a lasting impression.
+      </p>
+      <p class="about-text">
+        My journey in web development started with simple HTML pages and has evolved into 
+        creating complex web applications. I'm constantly learning new technologies and 
+        techniques to stay at the forefront of web development.
+      </p>
+      <h3 class="about-title" style="font-size: 32px;">Skills</h3>
+      <div class="skills-grid">
+        <div class="skill-item">HTML5</div>
+        <div class="skill-item">CSS3</div>
+        <div class="skill-item">JavaScript</div>
+        <div class="skill-item">React</div>
+        <div class="skill-item">Node.js</div>
+        <div class="skill-item">MongoDB</div>
+        <div class="skill-item">Git</div>
+        <div class="skill-item">Responsive Design</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="signature">E.S.</div>
+  
+  <nav class="navigation">
+    <div class="nav-item active">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+    </div>
+    <div class="nav-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+      </svg>
+    </div>
+    <div class="nav-item">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+    </div>
+  </nav>
+</body>
+</html>
